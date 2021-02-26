@@ -14,8 +14,6 @@ Default port is 9000 and credentials are `admin`/`admin`
 
 ## Running sonar-scanner
 
-You can find the last version of SonarScanner [on there documentation page](http://localhost:9000/documentation/analysis/scan/sonarscanner/)
-
 We are going to scan some Python code in `./example/python_code`
 
 1. First, go to the SonarQube interface, create a new project and grab :
