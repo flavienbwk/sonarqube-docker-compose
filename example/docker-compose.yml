@@ -9,10 +9,11 @@ services:
                 sonar-scanner \
                 -Dsonar.projectKey=${SQ_SCAN_PROJECTKEY} \
                 -Dsonar.sources=/usr/src \
+                -Dsonar.working.directory=/usr/sonarwork \
                 -Dsonar.host.url=${SQ_ENDPOINT} \
                 -Dsonar.login=${SQ_SCAN_TOKEN};
             "
         env_file:
             - .env
         volumes:
-            - ./python_code:/usr/src
+            - ./python_code:/usr/src:ro
