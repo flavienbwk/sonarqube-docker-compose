@@ -1,0 +1,6 @@
+projectKey=GitLabTest
+serverUrl=http://172.17.0.1:9000
+serverVersion=8.6.1.40680
+dashboardUrl=http://172.17.0.1:9000/dashboard?id=GitLabTest
+ceTaskId=AXfeZdmCaX5_2nmcMBWT
+ceTaskUrl=http://172.17.0.1:9000/api/ce/task?id=AXfeZdmCaX5_2nmcMBWT

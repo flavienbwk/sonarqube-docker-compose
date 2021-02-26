@@ -1,0 +1,18 @@
+version: '3.3'
+
+services:
+
+    scanner:
+        image: sonarsource/sonar-scanner-cli:4.6
+        command: >
+            bash -c "
+                sonar-scanner \
+                -Dsonar.projectKey=${SQ_SCAN_PROJECTKEY} \
+                -Dsonar.sources=/usr/src \
+                -Dsonar.host.url=${SQ_ENDPOINT} \
+                -Dsonar.login=${SQ_SCAN_TOKEN};
+            "
+        env_file:
+            - .env
+        volumes:
+            - ./python_code:/usr/src
