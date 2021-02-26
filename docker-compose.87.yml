@@ -1,0 +1,89 @@
+version: "3.3"
+
+services:
+
+    sonarqube:
+        image: sonarqube:8.7-datacenter-app
+        restart: always
+        depends_on:
+            - db
+            - search1
+            - search2
+            - search3
+        ports:
+            - 9000:9000
+        environment:
+            SONAR_JDBC_URL: jdbc:postgresql://db:5432/sonar
+            SONAR_JDBC_USERNAME: sonar
+            SONAR_JDBC_PASSWORD: sonar
+            SONAR_WEB_PORT: 9000
+            SONAR_CLUSTER_SEARCH_HOSTS: "search1,search2,search3"
+            SONAR_CLUSTER_HOSTS: "sonarqube"
+            SONAR_AUTH_JWTBASE64HS256SECRET: "dZ0EB0KxnF++nr5+4vfTCaun/eWbv6gOoXodiAMqcFo="
+            VIRTUAL_HOST: sonarqube.dev.local
+            VIRTUAL_PORT: 9000
+        volumes:
+            - sonarqube_extensions:/opt/sonarqube/extensions
+            - sonarqube_logs:/opt/sonarqube/logs
+
+    search1:
+        image: sonarqube:8.7-datacenter-search
+        restart: always
+        hostname: "search1"
+        depends_on:
+            - db
+        environment:
+            SONAR_JDBC_URL: jdbc:postgresql://db:5432/sonar
+            SONAR_JDBC_USERNAME: sonar
+            SONAR_JDBC_PASSWORD: sonar
+            SONAR_CLUSTER_ES_HOSTS: "search1,search2,search3"
+            SONAR_CLUSTER_NODE_NAME: "search1"
+        volumes:
+            - search-data-1:/opt/sonarqube/data
+
+    search2:
+        image: sonarqube:8.7-datacenter-search
+        restart: always
+        hostname: "search2"
+        depends_on:
+            - db
+        environment:
+            SONAR_JDBC_URL: jdbc:postgresql://db:5432/sonar
+            SONAR_JDBC_USERNAME: sonar
+            SONAR_JDBC_PASSWORD: sonar
+            SONAR_CLUSTER_ES_HOSTS: "search1,search2,search3"
+            SONAR_CLUSTER_NODE_NAME: "search2"
+        volumes:
+            - search-data-2:/opt/sonarqube/data
+
+    search3:
+        image: sonarqube:8.7-datacenter-search
+        restart: always
+        hostname: "search3"
+        depends_on:
+            - db
+        environment:
+            SONAR_JDBC_URL: jdbc:postgresql://db:5432/sonar
+            SONAR_JDBC_USERNAME: sonar
+            SONAR_JDBC_PASSWORD: sonar
+            SONAR_CLUSTER_ES_HOSTS: "search1,search2,search3"
+            SONAR_CLUSTER_NODE_NAME: "search3"
+        volumes:
+        - search-data-3:/opt/sonarqube/data
+
+    db:
+        image: postgres:12
+        restart: always
+        environment:
+            POSTGRES_USER: sonar
+            POSTGRES_PASSWORD: sonar
+        volumes:
+            - postgresql:/var/lib/postgresql
+
+volumes:
+    sonarqube_extensions:
+    sonarqube_logs:
+    search-data-1:
+    search-data-2:
+    search-data-3:
+    postgresql:
