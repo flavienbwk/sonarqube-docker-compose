@@ -30,4 +30,4 @@ We are going to scan some Python code in `./example/python_code`
     docker-compose up
     ```
 
-    :information_source: A `.scannerwork` directory will be created where your code to be scanned is located
+    :information_source: A `.scannerwork` folder will be created where your code to be scanned is located
