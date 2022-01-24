@@ -1,6 +1,6 @@
 # Sonarqube - Docker compose
 
-Version included : `8.6.1`
+Version included : `9.2.4`
 
 That'll be pretty straightforward :
 
@@ -9,8 +9,6 @@ docker-compose up -d
 ```
 
 Default port is 9000 and credentials are `admin`/`admin`
-
-:information_source: The 8.7 version of SonarQube currently seem to have issues with Docker. It won't start.
 
 ## Running sonar-scanner
 
