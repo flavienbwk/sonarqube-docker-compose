@@ -1,10 +1,14 @@
 # Sonarqube - Docker compose
 
-Version included : `9.2.4`
+Default version included : `10.6.0`
 
 That'll be pretty straightforward :
 
 ```bash
+sudo sysctl -w vm.max_map_count=512000
+# Persist this setting in `/etc/sysctl.conf` and execute `sysctl -p`
+
+cp .env.example .env
 docker-compose up -d
 ```
 
@@ -27,3 +31,8 @@ We are going to scan some Python code in `./example/python_code`
     cd example
     docker-compose up
     ```
+
+## Popular plugins for Community Edition
+
+- Multi-branch : https://github.com/mc1arke/sonarqube-community-branch-plugin
+- Active Directory SSO : https://github.com/hkamel/sonar-auth-aad

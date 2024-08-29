@@ -1,0 +1,86 @@
+# This config requires a paid license
+
+services:
+
+  sonarqube-app1:
+    image: sonarqube:10.6.0-datacenter-app
+    container_name: sonarqube-app1  # by default it uses sonarqube-app1-1
+    hostname: sonarqube-app1
+    restart: always
+    depends_on:
+      - database
+    env_file:
+      - .env
+    environment:
+      SONAR_CLUSTER_SEARCH_HOSTS: search1,search2,search3
+      SONAR_CLUSTER_HOSTS: sonarqube-app1
+      SONAR_CE_JAVAOPTS: -Xmx1G -Xms128m -XX:+HeapDumpOnOutOfMemoryError
+    volumes:
+      - ./extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+    ports:
+      - "9000:9000"
+
+  search1:
+    image: sonarqube:10.6.0-datacenter-search
+    container_name: search1  # by default it uses search1-1
+    hostname: search1
+    restart: always
+    env_file:
+      - .env
+    environment:
+      SONAR_CLUSTER_ES_HOSTS: search1,search2,search3
+      SONAR_CLUSTER_NODE_NAME: "search1"
+      SONAR_SEARCH_JAVAOPTS: -Xmx600M -Xms600M -XX:MaxDirectMemorySize=256M -XX:+HeapDumpOnOutOfMemoryError
+    volumes:
+      - sonarqube_data1:/opt/sonarqube/data
+      
+  search2:
+    image: sonarqube:10.6.0-datacenter-search
+    container_name: search2  # by default it uses search2-1
+    hostname: search2
+    restart: always
+    env_file:
+      - .env
+    environment:
+      SONAR_CLUSTER_ES_HOSTS: search1,search2,search3
+      SONAR_CLUSTER_NODE_NAME: "search2"
+      SONAR_SEARCH_JAVAOPTS: -Xmx600M -Xms600M -XX:MaxDirectMemorySize=256M -XX:+HeapDumpOnOutOfMemoryError
+    volumes:
+      - sonarqube_data2:/opt/sonarqube/data
+
+  search3:
+    image: sonarqube:10.6.0-datacenter-search
+    restart: always
+    container_name: search3  # by default it uses search3-1
+    hostname: search3
+    env_file:
+      - .env
+    environment:
+      SONAR_CLUSTER_ES_HOSTS: search1,search2,search3
+      SONAR_CLUSTER_NODE_NAME: "search3"
+      SONAR_SEARCH_JAVAOPTS: -Xmx600M -Xms600M -XX:MaxDirectMemorySize=256M -XX:+HeapDumpOnOutOfMemoryError
+    volumes:
+      - sonarqube_data3:/opt/sonarqube/data
+
+  database:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: ${SONAR_JDBC_USERNAME}
+      POSTGRES_PASSWORD: ${SONAR_JDBC_PASSWORD}
+    volumes:
+      - postgresql:/var/lib/postgresql
+      - postgresql_data:/var/lib/postgresql/data
+
+  #busybox:
+  #  image: ubuntu
+  #  command: tail -F anything
+  
+volumes:
+  sonarqube_logs:
+  sonarqube_data1:
+  sonarqube_data2:
+  sonarqube_data3:  
+  postgresql:
+  postgresql_data:

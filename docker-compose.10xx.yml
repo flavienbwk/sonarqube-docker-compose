@@ -1,0 +1,35 @@
+services:
+
+  sonarqube:
+    image: sonarqube:10.6.0-community
+    container_name: sonarqube
+    hostname: sonarqube
+    restart: always
+    depends_on:
+      - database
+    env_file:
+      - .env
+    environment:
+      SONAR_CE_JAVAOPTS: -Xmx4G -Xms1G -XX:+HeapDumpOnOutOfMemoryError
+    volumes:
+      - ./extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+      - sonarqube_data:/opt/sonarqube/data
+    ports:
+      - "9000:9000"
+
+  database:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: ${SONAR_JDBC_USERNAME}
+      POSTGRES_PASSWORD: ${SONAR_JDBC_PASSWORD}
+    volumes:
+      - postgresql:/var/lib/postgresql
+      - postgresql_data:/var/lib/postgresql/data
+  
+volumes:
+  sonarqube_logs:
+  sonarqube_data:
+  postgresql:
+  postgresql_data:
