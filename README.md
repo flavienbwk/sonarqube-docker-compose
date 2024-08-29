@@ -36,3 +36,10 @@ We are going to scan some Python code in `./example/python_code`
 
 - Multi-branch : https://github.com/mc1arke/sonarqube-community-branch-plugin
 - Active Directory SSO : https://github.com/hkamel/sonar-auth-aad
+
+Don't forget to add this property to `sonar.properties`:
+
+```
+sonar.web.javaAdditionalOpts=-javaagent:./extensions/plugins/sonarqube-community-branch-plugin-1.21.0.jar=web
+sonar.ce.javaAdditionalOpts=-javaagent:./extensions/plugins/sonarqube-community-branch-plugin-1.21.0.jar=ce
+```

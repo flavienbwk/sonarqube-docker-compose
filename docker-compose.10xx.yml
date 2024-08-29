@@ -13,6 +13,7 @@ services:
       SONAR_CE_JAVAOPTS: -Xmx4G -Xms1G -XX:+HeapDumpOnOutOfMemoryError
     volumes:
       - ./extensions:/opt/sonarqube/extensions
+      - ./sonar.properties:/opt/sonarqube/conf/sonar.properties
       - sonarqube_logs:/opt/sonarqube/logs
       - sonarqube_data:/opt/sonarqube/data
     ports:
